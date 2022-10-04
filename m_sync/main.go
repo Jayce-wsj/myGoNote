@@ -43,12 +43,13 @@ func funcWithRecover(f func() error) func() error {
 func main() {
 	errgroup := &errgroup.Group{}
 	funArrary := []func() error{g1, g2}
-	for j := 0; j < len(funArrary); j++ {
+	//for j := 0; j < len(funArrary); j++ {
+	for _, f := range funArrary {
 		//	这里如果传j是传地址进去，会出现问题，因为j是循环变量，最后的值是2，所以最后的结果都是2
-		start := j
+		//start := j
 		errgroup.Go(funcWithRecover(func() error {
-			fmt.Printf("start address: %p\n", &start)
-			err := funArrary[start]()
+			fmt.Printf("start address: %p\n", &f)
+			err := f()
 			if err != nil {
 				return err
 			}
